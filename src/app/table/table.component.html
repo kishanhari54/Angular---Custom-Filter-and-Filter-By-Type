@@ -1,0 +1,49 @@
+<!-- table.component.html -->
+<div>
+  <!-- Filter input -->
+  <label>Filter:</label>
+  <input
+    type="text"
+    [(ngModel)]="filterValue"
+    (input)="applyFilter()"
+    placeholder="Type to filter"
+  />
+</div>
+
+<div *ngIf="options && options.filter.included">
+  <!-- Dropdown for column selection -->
+
+  <mat-label>Column</mat-label>
+  <mat-select (selectionChange)="onColumnSelected($event)">
+    <mat-option *ngFor="let col of displayedColumns" [value]="col">
+      {{ col }}
+    </mat-option>
+  </mat-select>
+
+  <!-- Dropdown for value selection based on selected column -->
+  <div>
+    <label>Select Value:</label>
+
+    <mat-select
+      (selectionChange)="onValueSelected($event)"
+      [value]="selectedValue"
+    >
+      <mat-option value="John">John</mat-option>
+      <mat-option value="Jane">Jane</mat-option>
+      <mat-option value="Doe">Doe</mat-option>
+    </mat-select>
+  </div>
+</div>
+
+<!-- Table -->
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- Columns -->
+  <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+    <th mat-header-cell *matHeaderCellDef>{{ col | titlecase }}</th>
+    <td mat-cell *matCellDef="let element">{{ element[col] }}</td>
+  </ng-container>
+
+  <!-- Header and Row content -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
